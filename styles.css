@@ -1,0 +1,79 @@
+:root{
+    --primary: #F22738;
+    --secondary: #A63247;
+    --tertiary: #3E3740;
+    --quaternary: #F2DDD0;
+    --quinary: #F2F2F2;
+}
+
+
+*{
+    padding: 5px;
+    margin: 2px;
+}
+
+body{
+    background-color: var(--quinary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary);
+}
+
+h1 {
+    font-size: 48px;
+}
+
+a, p {
+    color: var(--secondary);
+}
+
+a {
+    text-decoration: none;
+}
+
+span{
+    text-align: center;
+}
+
+button {
+    border-radius: 12px;
+    background-color: var(--quaternary);
+    color: var(--secondary);
+    width: 150px;
+    padding: 7px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: var(--tertiary);
+}
+
+main{
+    margin: 0 auto;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: solid 2px var(--tertiary);
+}
+
+footer {
+    position: fixed;
+    bottom: 5px;
+}
+
+#action_buttons{
+    display: flex;
+    justify-content: center;
+}
+
+#answers{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Quiz</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <span id="view_high_scores">
+            <a href="highscores.html"><h3>High Scores</h3></a>
+        </span>
+        <h1>QUIZ</h1>
+        <span id="timer_text"><h3>Time Remaining: <h3>
+            <h3><span id="timer_value">x</span></h3>
+        </span>
+    </header>
+
+    <section id="action_buttons">
+        <button type="button" id="start_button">
+            Start Game
+        </button>
+        <button type="button" id="end_button">
+            End Game
+        </button>
+    </section>
+
+    <main>
+        <div id="question">
+
+        </div>
+        <div id="answers">
+
+        </div>
+        <div id="feedback">
+            
+        </div>
+    </main>
+
+    <footer>
+        <button id="change_color_button">Change Colors</button>
+    </footer>
+    <script src="utilities.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
