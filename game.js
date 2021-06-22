@@ -1,4 +1,6 @@
 // || DOCUMENT ELEMENTS
+// local storage
+let localStorage = window.localStorage;
 // buttons
 let startBtn = document.querySelector('#start_button');
 let endBtn = document.querySelector('#end_button');
@@ -58,32 +60,77 @@ startBtn.addEventListener('click', startGame);
 endBtn.addEventListener('click', endGame);
 
 // || FUNCTIONS
-function startGame(event){
-    buildQuestions();
-    startTimer();
-    nextQuestion();
-}
-
-function endGame(event){
-    tearDown();
-}
-
-function nextQuestion(){
-    // increment question
-    currentQuestion = questions[currentQuestionIndex]
-    currentQuestion.render();
-    currentQuestionIndex += 1;
-}
-
-function guess(event){
-    let choiceIndex = parseInt(event.target.dataset['index'], 10);
-    if(choiceIndex === currentQuestion.correctIndex){
-        correctGuess();
-    } else {
-        wrongGuess()
+function addEventListenersForAnswerButtons(){
+    // add event listener to buttons created
+    let buttonElements = document.querySelectorAll('.answer_button');
+    for(let i=0; i<buttonElements.length; i++){
+        buttonElements[i].addEventListener('click', guess);
     }
+}
+
+function addEventListenersForUserForm(){
+    let submitBtn = document.querySelector('#submit_button');
+    let cancelBtn = document.querySelector('#cancel_button');
+
+    submitBtn.addEventListener('click', submitUserForm);
+    cancelBtn.addEventListener('click', cancelUserSubmission);
+}
+
+function announceFeedback(feedback){
+    let feedbackElement = document.createElement('p')
+    feedbackElement.className = "feedback_text";
+    feedbackElement.innerText = feedback;
+    feedbackSection.appendChild(feedbackElement);
+
+    setTimeout(function (){
+        feedbackSection.textContent = "";
+    }, 2000)
+}
+
+function buildQuestions(){
+    questions.push(new Question(
+        'How many?', ['Too many', 'Not enough', 'Just right', 'Other'], 2
+    ));
+    questions.push(new Question(
+        'Why?', ['Because', 'Because Why Not', 'Because I said so', 'Do it!'], 3
+    ));
+}
+
+function buildUserInitialsForm(){
+    // update question area to ask user for initials
+    // update answer area with an input field
+    // update feedback area with a submit and cancel button
+    let formElement = document.createElement('form');
+    let prompt = document.createElement('h2');
+    let userInput = document.createElement('input');
+    let userSubmit = document.createElement('button');
+    let userCancel = document.createElement('button');
+
+    prompt.innerText = 'Add initials to store your score';
+    userInput.id="user_input"
+    userSubmit.innerText = 'SAVE';
+    userSubmit.id="submit_button";
+    userSubmit.setAttribute('type', 'submit')
+    userCancel.innerText = 'CANCEL';
+    userCancel.id="cancel_button";
+    userCancel.setAttribute('type', 'button')
+
+    questionSection.appendChild(formElement);
+    formElement.appendChild(prompt);
+    formElement.appendChild(userInput);
+    formElement.appendChild(userSubmit);
+    formElement.appendChild(userCancel);
+
+    addEventListenersForUserForm();
+
+}
+
+function cancelUserSubmission(){
     tearDown();
-    nextQuestion();
+}
+
+function changeScore(amount){
+    score += amount;
 }
 
 function correctGuess(){
@@ -91,27 +138,44 @@ function correctGuess(){
     announceFeedback('Correct');
 }
 
-function wrongGuess(answer){
-    // this is a placeholder if you want to do punishment errors
-    changeScore(0);
-    announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
+function endGame(event){
+    tearDown();
+    clearInterval(timer);
+    // reset timer display to empty
+    timerElement.textContent = "";
+    logUserScore();
 }
 
-function announceFeedback(feedback){
-    let feedbackElement = document.createElement('p')
-    feedbackElement.className = "feedback_text";
-    feedbackElement.innerText = feedback;
-
-    setInterval(function (){
-        feedbackSection.appendChild(feedbackElement);
-    }, 2000)
+function guess(event){
+    let choiceIndex = parseInt(event.target.dataset['index'], 10);
+    if(choiceIndex === currentQuestion.correctIndex){
+        correctGuess();
+    } else {
+        wrongGuess();
+    }
+    tearDown();
+    nextQuestion();
 }
 
-function addEventListenersForAnswerButtons(){
-    // add event listener to buttons created
-    let buttonElements = document.querySelectorAll('.answer_button');
-    for(let i=0; i<buttonElements.length; i++){
-        buttonElements[i].addEventListener('click', guess);
+function getUserInitials(){
+    buildUserInitialsForm();
+    
+}
+
+function logUserScore(){
+    userInitials = getUserInitials();
+    // saveUserScore(userInitials);
+}
+
+function nextQuestion(){
+    // increment question and play
+    if(currentQuestionIndex < questions.length){
+        currentQuestion = questions[currentQuestionIndex]
+        currentQuestion.render();
+        currentQuestionIndex += 1;
+    // condition that end of questions has been reached
+    } else {
+        endGame();
     }
 }
 
@@ -123,14 +187,16 @@ function removeEventListenersForAnswerButtons(){
     }
 }
 
-function changeScore(amount){
-    score += amount;
+function saveUserScore(initials){
+    // let userScore = {'initials': initials, 'score': score};
+    localStorage.setItem(initials, score);
+    console.log('saved user initials', initials);
 }
 
-function tearDown(){
-    removeEventListenersForAnswerButtons();
-    questionSection.textContent = "";
-    answerSection.textContent = "";
+function startGame(event){
+    buildQuestions();
+    startTimer();
+    nextQuestion();
 }
 
 function startTimer(){
@@ -139,18 +205,28 @@ function startTimer(){
         timerValue --;
         timerElement.textContent = timerValue;
 
-        // conditions to break countdown
+        // condition to break countdown
         if (timerValue === 0){
-            clearInterval(timer);
             // lost the game due to timeout
+            endGame();
     }}, 1000)
 }
 
-function buildQuestions(){
-    questions.push(new Question(
-        'How many?', ['Too many', 'Not enough', 'Just right', 'Other'], 2
-    ));
-    questions.push(new Question(
-        'Why?', ['Because', 'Because Why Not', 'Because I said so', 'Do it!'], 3
-    ));
+function submitUserForm(event){
+    let user_initials = event.target.form[0].value;
+    saveUserScore(user_initials);
+    tearDown();
+}
+
+function tearDown(){
+    removeEventListenersForAnswerButtons();
+    questionSection.textContent = "";
+    answerSection.textContent = "";
+}
+
+function wrongGuess(){
+    // this is a placeholder if you want to do punishment errors
+    changeScore(0);
+    timer -= 5;
+    announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
 }
