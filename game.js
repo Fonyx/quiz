@@ -102,7 +102,7 @@ class UserScores{
         let resetButton = document.createElement('button');
         resetButton.id="reset_scores_button";
         resetButton.innerText = "Reset leaderboard";
-        resetButton.addEventListener('click', reset);
+        resetButton.addEventListener('click', resetLocalMemory);
         main.appendChild(resetButton);
 
         // make table elements
@@ -284,10 +284,14 @@ function resetStartScreen(){
     main.appendChild(feedbackDiv);
 }
 
-function reset(){
+function resetLocalMemory(){
     localStorage.clear();
     scores.load();
     scores.render();
+}
+
+function restartGame(){
+    
 }
 
 // || FUNCTIONS
@@ -362,10 +366,6 @@ function cancelUserSubmission(){
     resetStartEndButtons();
 }
 
-function changeScore(amount){
-    score += amount;
-}
-
 function deactivateStartButton(){
     let startBtn = document.querySelector('#start_button');
     let endBtn = document.querySelector('#end_button');
@@ -378,20 +378,20 @@ function endGame(){
     clearInterval(timer);
     // reset timer display to empty
     timerElement.textContent = "";
-    // clearMainTag();
+    clearMainTag();
     emptyQuestionAnswerSections();
-    // resetStartScreen();
-    // resetStartEndButtons();
+    resetStartScreen();
+    resetStartEndButtons();
 }
 
 function guess(event){
     let choiceIndex = parseInt(event.target.dataset['index'], 10);
     if(choiceIndex === currentQuestion.correctIndex){
-        changeScore(1);
+        score ++;
         announceFeedback('Correct');
     } else {
         // this is a placeholder if you want to do punishment errors
-        changeScore(0);
+        // score --;
         timerValue -= 5;
         announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
     }
