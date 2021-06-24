@@ -82,6 +82,10 @@ footer {
     bottom: 5px;
 }
 
+.highscore_row{
+    color: var(--tertiary)
+}
+
 #action_buttons{
     display: flex;
     justify-content: center;
@@ -96,4 +100,8 @@ footer {
 #player_table {
     margin: 0 auto;
     text-align: center;
+}
+
+#view_high_scores{
+    cursor: pointer;
 }
