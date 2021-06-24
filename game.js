@@ -7,6 +7,14 @@ let main = document.querySelector('main');
 let timerElement = document.querySelector('#timer_value');
 
 
+// set globals for game
+questions = [];
+currentQuestion = new Object;
+currentQuestionIndex = 0;
+score = 0;
+// timerValue = 30;
+feedbackTimeout = 2000;
+
 // || STRUCTURES
 class Question{
     constructor(question, answers, correctIndex){
@@ -283,7 +291,13 @@ function reset(){
 }
 
 // || FUNCTIONS
+function activateStartButton(){
+    let startBtn = document.querySelector('#start_button');
+    let endBtn = document.querySelector('#end_button');
 
+    startBtn.disabled = false;
+    endBtn.disabled = true;
+}
 
 function announceFeedback(feedback){
 
@@ -293,7 +307,7 @@ function announceFeedback(feedback){
 
     // create new feedback element and fill
     let feedbackElement = document.createElement('p')
-    feedbackElement.className = "feedback_text";
+    feedbackElement.id = "feedback_text";
     feedbackElement.innerText = feedback;
     feedbackSection.appendChild(feedbackElement);
 
@@ -352,11 +366,6 @@ function changeScore(amount){
     score += amount;
 }
 
-function correctGuess(){
-    changeScore(1);
-    announceFeedback('Correct');
-}
-
 function deactivateStartButton(){
     let startBtn = document.querySelector('#start_button');
     let endBtn = document.querySelector('#end_button');
@@ -365,36 +374,26 @@ function deactivateStartButton(){
     endBtn.disabled = false;
 }
 
-function activateStartButton(){
-    let startBtn = document.querySelector('#start_button');
-    let endBtn = document.querySelector('#end_button');
-
-    startBtn.disabled = false;
-    endBtn.disabled = true;
-}
-
 function endGame(){
     clearInterval(timer);
     // reset timer display to empty
     timerElement.textContent = "";
-    clearMainTag();
-    resetStartScreen();
-    resetStartEndButtons();
-}
-
-function loseGame(){
-    clearMainTag();
-    clearInterval(timer);
-    // reset timer display to empty
-    timerElement.textContent = "";
+    // clearMainTag();
+    emptyQuestionAnswerSections();
+    // resetStartScreen();
+    // resetStartEndButtons();
 }
 
 function guess(event){
     let choiceIndex = parseInt(event.target.dataset['index'], 10);
     if(choiceIndex === currentQuestion.correctIndex){
-        correctGuess();
+        changeScore(1);
+        announceFeedback('Correct');
     } else {
-        wrongGuess();
+        // this is a placeholder if you want to do punishment errors
+        changeScore(0);
+        timerValue -= 5;
+        announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
     }
     nextQuestion();
 }
@@ -402,6 +401,15 @@ function guess(event){
 function getUserScores(){
     let scores = localStorage.getItem('userScores');
     return scores;
+}
+
+function loseGame(){
+    clearMainTag();
+    clearInterval(timer);
+    // reset timer display to empty
+    timerElement.textContent = "";
+    resetStartScreen();
+    resetStartEndButtons();
 }
 
 function nextQuestion(){
@@ -419,6 +427,13 @@ function nextQuestion(){
     }
 }
 
+function outputScore(){
+    let output = document.createElement('h3');
+    output.innerText = 'You scored: '+score+' out of: '+ questions.length;
+    output.id = "score_output";
+    main.appendChild(output);
+}
+
 function prepareGame(){
     // init globals for game
     questions = [];
@@ -433,6 +448,7 @@ function prepareGame(){
     resetStartScreen();
     resetStartEndButtons();
     activateStartButton();
+    buildQuestions();
 }
 
 function showHighScores(){
@@ -443,20 +459,14 @@ function showHighScores(){
 }
 
 function startGame(){ 
-    // set globals for game
-    questions = [];
-    currentQuestion = new Object;
-    currentQuestionIndex = 0;
-    score = 0;
-    timerValue = 30;
-    feedbackTimeout = 2000;
     deactivateStartButton();
-    buildQuestions();
     startTimer();
     nextQuestion();
 }
 
 function startTimer(){
+
+    let timerValue = 30;
 
     timer = setInterval(function(){
         timerValue --;
@@ -481,12 +491,6 @@ function submitUserForm(event){
 
 function winGame(){
     endGame();
+    outputScore();
     buildUserInitialsForm();
-}
-
-function wrongGuess(){
-    // this is a placeholder if you want to do punishment errors
-    changeScore(0);
-    timer -= 5;
-    announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
 }
