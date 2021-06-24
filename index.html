@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body onload="prepareGame();">
     <header>
         <span id="view_high_scores">
             <a href="highscores.html"><h3>High Scores</h3></a>
@@ -23,7 +23,7 @@
         <button type="button" id="start_button">
             Start Game
         </button>
-        <button type="button" id="end_button">
+        <button type="button" id="end_button" disabled>
             End Game
         </button>
     </section>

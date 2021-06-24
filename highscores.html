@@ -8,17 +8,30 @@
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body onload="displayHighScores();">
     <header>
-        <a href="index.html">Play again</a>
+        <a href="index.html">
+            <h1>PLAY AGAIN?</h1>
+        </a>
+        <h1>PLAYER BOARD</h1>
     </header>
     
-    <main></main>
+    <main>
+        <div id="player_board">
+            <table id="player_table">
+                <tr id="table_header">
+                    <td><h2>Username</h2></td>
+                    <td><h2>Score</h2></td>
+                </tr>
+            </table>
+        </div>
+    </main>
 
     <footer>
         <button id="change_color_button">Change Colors</button>
     </footer>
 
-    <script src="highscores.js"></script>
+    <script src="game.js"></script>
+    <script src="utilities.js"></script>
 </body>
 </html>

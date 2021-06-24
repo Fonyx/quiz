@@ -22,7 +22,22 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 48px;
+    color: var(--primary);
 }
+
+h2 {
+    font-size: 36px;
+    color: var(--secondary);
+}
+h3 {
+    font-size: 24px;
+    color: var(--secondary);
+}
+h4, h5, h6 {
+    font-size: 18px;
+    color: var(--secondary);
+}
+
 
 a, p {
     color: var(--secondary);
@@ -76,4 +91,9 @@ footer {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+}
+
+#player_table {
+    margin: 0 auto;
+    text-align: center;
 }

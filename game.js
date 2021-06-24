@@ -12,6 +12,8 @@ let questionSection = document.querySelector('#question');
 let answerSection = document.querySelector('#answers');
 // feedback
 let feedbackSection = document.querySelector('#feedback')
+// player results table
+let playerTable = document.querySelector('#player_table');
 
 // || GLOBAL SETTINGS AND VARIABLES
 questions = [];
@@ -19,6 +21,7 @@ currentQuestion = new Object;
 currentQuestionIndex = 0;
 score = 0;
 timerValue = 30;
+let feedbackTimeout = 2000;
 
 // || STRUCTURES
 class Question{
@@ -53,11 +56,108 @@ class Question{
 
 }
 
-// || UTILITIES
+class UserScores{
+    constructor(){
+        // load results from storage first
+        this.results = [];
+        this.load();
+    }
 
-// || EVENT HANDLERS
-startBtn.addEventListener('click', startGame);
-endBtn.addEventListener('click', endGame);
+    addScore(initials, score){
+        // add the result to the score object stored values
+        this.results.push({'initials': initials, 'score': score})
+        this.sort(false);
+    }
+
+    sort(ascending){
+        if (ascending){
+            this.results.sort(compareAsc);
+        } else {
+            this.results.sort(compareDesc);
+        }
+    }
+
+    save(){
+        localStorage.setItem('userScores', JSON.stringify(this.results));
+    }
+
+    load(){
+        // get results from the save store
+        let loadedResults = JSON.parse(localStorage.getItem('userScores'));
+        if (loadedResults){
+            this.results = loadedResults;
+        } else {
+            // if object has no records in memory, start it off as empty
+            console.log('No result found in local storage, results are empty')
+        }
+        
+    }
+
+    clearDisplay(){
+        playerTable.textContent = '';
+        console.log('cleared display of high scores');
+    }
+
+    render(){
+        // flag for empty result case
+        let results = false;
+        // make sure we aren't just appending to the list
+        this.clearDisplay();
+        for(let i =0; i<this.results.length; i++){
+            // create table row element
+            let tableRow = document.createElement('tr');
+
+            // define row properties
+            tableRow.setAttribute('data-index', i);
+            tableRow.className = "highscore_row";
+
+            // create table data elements and set class names
+            let tableDataInitial = document.createElement('td');
+            tableDataInitial.className = "table_data_initial";
+            let tableDataScore = document.createElement('td');
+            tableDataScore.className = "table_data_score";
+
+            // attach table data to row
+            tableRow.appendChild(tableDataInitial);
+            tableRow.appendChild(tableDataScore);
+            // attach table row to table
+            playerTable.appendChild(tableRow);
+            // set so we know results were printed
+            results = true;
+        }
+        // if no results were printed
+        if(!results){
+            // create announcement node to display that no results were rendered
+            let announcement = document.createElement('h3');
+            // add announcement text
+            announcement.innerText = 'No results found in local storage';
+            // get parent div of the table
+            let tablePlayerBoard = document.querySelector('#player_board');
+            tablePlayerBoard.appendChild(announcement);
+        }
+    }
+}
+
+// || UTILITIES
+function compareAsc(a, b){ 
+    if (a.score < b.score){
+        return 1
+    } else if (a.score > b.score){
+        return -1
+    } else {
+        return 0
+    }
+}
+
+function compareDesc(a, b){
+    if (a.score > b.score){
+        return 1
+    } else if (a.score < b.score){
+        return -1
+    } else {
+        return 0
+    }
+}
 
 // || FUNCTIONS
 function addEventListenersForAnswerButtons(){
@@ -84,7 +184,7 @@ function announceFeedback(feedback){
 
     setTimeout(function (){
         feedbackSection.textContent = "";
-    }, 2000)
+    }, feedbackTimeout)
 }
 
 function buildQuestions(){
@@ -138,12 +238,15 @@ function correctGuess(){
     announceFeedback('Correct');
 }
 
-function endGame(event){
+function endGame(){
     tearDown();
     clearInterval(timer);
     // reset timer display to empty
     timerElement.textContent = "";
     logUserScore();
+    // reactivate the start button
+    startBtn.disabled = false;
+    endBtn.disabled = true;
 }
 
 function guess(event){
@@ -162,9 +265,22 @@ function getUserInitials(){
     
 }
 
+function getUserScores(){
+    let scores = localStorage.getItem('userScores');
+    return scores;
+}
+
 function logUserScore(){
     userInitials = getUserInitials();
     // saveUserScore(userInitials);
+}
+
+function displayHighScores(){
+    // get the scores from local storage
+    let scores = new UserScores();
+    scores.load();
+    console.log(scores);
+    scores.render();
 }
 
 function nextQuestion(){
@@ -177,6 +293,14 @@ function nextQuestion(){
     } else {
         endGame();
     }
+}
+
+function prepareGame(){
+    // add event listeners to game page
+    startBtn.addEventListener('click', startGame);
+    endBtn.addEventListener('click', endGame); 
+    // build question objects
+    buildQuestions();
 }
 
 function removeEventListenersForAnswerButtons(){
@@ -193,8 +317,9 @@ function saveUserScore(initials){
     console.log('saved user initials', initials);
 }
 
-function startGame(event){
-    buildQuestions();
+function startGame(event){ 
+    startBtn.disabled = true;
+    endBtn.disabled = false;
     startTimer();
     nextQuestion();
 }
