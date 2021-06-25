@@ -1,13 +1,12 @@
 // RUNTIME
 
 // test build questions
-function testQuestionBuildQuestions(){
-    console.log('TESTING-QuestionBuildQuestions');
+function testBuildQuestions(){
+    console.log('TESTING-BuildQuestions');
     let test_passed = true;
-    let game = new Game();
-    game.buildQuestions();
-    // console.log(game.questions);
-    if (game.questions.length != 2){
+    buildQuestions();
+    // console.log(questions);
+    if (questions.length != 2){
         test_passed = false;
     }
 
@@ -105,13 +104,21 @@ function testScoreResetLocalMemory(){
 }
 
 // test timer - console log test
-function testGameStartTimer(){
-    console.log('TESTING-GameStartTimer')
-    let game = new Game();
-    timerValue = 5;
+function testStartTimer(){
+    console.log('TESTING-StartTimer')
+    let timeLimit = 5;
     console.log('\tStarting timer at 5 seconds');
-    game.startTimer();
+    startTimer(timeLimit);
     
+}
+
+// run all tests
+function runTests(){
+    testScoreResetLocalMemory(); // works 
+    testBuildQuestions(); // works 
+    testScoreSaveAndLoad(); // works 
+    testScoreSort(); // works 
+    testStartTimer(); //
 }
 
 // default test structure

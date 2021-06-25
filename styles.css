@@ -82,6 +82,17 @@ footer {
     bottom: 5px;
 }
 
+#game{
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+}
+
+#feedback{
+    text-align: center;
+    margin-top: 5px;
+}
+
 .highscore_row{
     color: var(--tertiary)
 }
