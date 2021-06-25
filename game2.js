@@ -1,8 +1,10 @@
 // GLOBALS
 debug = false;
+feedbackTimeout = 2500;
 
 // ELEMENTS
 timerElement = $('#timer_value');
+buttonElement = $('#buttons');
 gameElement = $('#game');
 feedbackElement = $('#feedback');
 
@@ -15,13 +17,67 @@ function activateStartButton(){
     endBtn.attr('disabled', true);
 }
 
+function announceFeedback(feedback){
+
+    // reset the feedback if it is still active from last announcement
+    feedbackElement.text("");
+
+    // create new feedback element and fill
+    let paragraphElement = $('<p>');
+    paragraphElement.attr('id',"feedback_text");
+    paragraphElement.text(feedback);
+    feedbackElement.append(paragraphElement);
+
+    // append and set to empty once timeout
+    setTimeout(function (){
+        feedbackElement.text("");
+    }, feedbackTimeout)
+}
+
 function buildQuestions(){
+    questions = [];
+
     questions.push(new Question(
         'How many?', ['Too many', 'Not enough', 'Just right', 'Other'], 2
     ));
     questions.push(new Question(
         'Why?', ['Because', 'Because Why Not', 'Because I said so', 'Do it!'], 3
     ));
+}
+
+function buildUserInitialsForm(){
+    // update question area to ask user for initials
+    // update answer area with an input field
+    // update feedback area with a submit and cancel button
+    let formElement = $('<form>');
+    let prompt = $('<h2>');
+    let userInput = $('<input>');
+    let userSubmit = $('<button>');
+    let userCancel = $('<button>');
+
+    prompt.text('Add initials to store your score');
+    userInput.attr('id', 'user_input');
+    userSubmit.text('SAVE');
+    userSubmit.attr('id','submit_button');
+    userSubmit.attr('type', 'submit')
+    userCancel.text('CANCEL');
+    userCancel.attr('id','cancel_button');
+    userCancel.attr('type', 'button')
+
+    gameElement.append(formElement);
+    formElement.append(prompt);
+    formElement.append(userInput);
+    formElement.append(userSubmit);
+    formElement.append(userCancel);
+
+    // add event listeners
+    userSubmit.on('click', submitUserForm);
+    userCancel.on('click', cancelUserSubmission);
+}
+
+function cancelUserSubmission(){
+    announceFeedback('Ok keep your secrets');
+    drawGameStart();
 }
 
 function clearTimer(){
@@ -37,29 +93,57 @@ function deactivateStartButton(){
     endBtn.attr('disabled',false);
 }
 
-function drawGameStart(){
-    // reset game and feedback elements
+function drawActiveQuestion(){
+
+    // reset game element
     gameElement.text("");
-    feedbackElement.text("");
+
+    currentQuestion = questions[activeQuestionIndex]
+
+    // render question
+    let questionElement = $('<h2>');
+    questionElement.attr('id',"question_text");
+    questionElement.text(currentQuestion.question);
+    gameElement.append(questionElement);
+
+    // render answers as buttons
+    for(let i = 0; i<currentQuestion.answers.length; i++){
+        let answerButton = $('<button>')
+        answerButton.attr('class',"answer_button");
+        answerButton.attr('data-index',i);
+        answerButton.text(currentQuestion.answers[i]);
+        gameElement.append(answerButton);
+    }
+
+    // add event listener to buttons created
+    let buttonElements = $('.answer_button');
+    buttonElements.on('click', guess)
+
+}
+
+function drawGameStart(){
+    // reset game element
+    gameElement.text("");
+    
     // create start and stop buttons
-    let startBtn = document.createElement('button');
-    let endBtn = document.createElement('button');
+    let startBtn = $('<button>');
+    let endBtn = $('<button>');
 
     // set initial properties of buttons
-    startBtn.type="button";
-    startBtn.id = "start_button";
-    startBtn.innerText = "START";
-    endBtn.type="button";
-    endBtn.id = "end_button";
-    endBtn.innerText = "END";
+    startBtn.attr('type','button');
+    startBtn.attr('id','start_button');
+    startBtn.text("START");
+    endBtn.attr('type','button');
+    endBtn.attr('id','end_button');
+    endBtn.text("END");
 
     // attach buttons to button_section
-    gameElement.append(startBtn);
-    gameElement.append(endBtn);
+    buttonElement.append(startBtn);
+    buttonElement.append(endBtn);
 
     // add event listeners to buttons
-    startBtn.addEventListener('click', startGame);
-    endBtn.addEventListener('click', exitGame);
+    startBtn.on('click', startGame);
+    endBtn.on('click', exitGame);
 
     // set active states for buttons
     activateStartButton();
@@ -70,6 +154,7 @@ function exitGame(){
     console.log('You left the game early');
     activateStartButton();
     clearTimer();
+    buttonElement.text("");
     drawGameStart();
 }
 
@@ -77,36 +162,80 @@ function gameTimeout(){
     console.log('Game timed out');
     activateStartButton();
     clearTimer();
+    buttonElement.text("");
     drawGameStart();
 }
 
+function guess(event){
+    let choiceIndex = parseInt(event.target.dataset['index'], 10);
+    // if guessed correctly
+    if(choiceIndex === currentQuestion.correctIndex){
+        currentScore += 1;
+        announceFeedback('Correct');
+    } else {
+        // this is a placeholder if you want to do punishment errors
+        // currentScore --;
+        timeLimit -= 5;
+        announceFeedback('Wrong, the answer was: '+currentQuestion.answers[activeQuestionIndex]);
+    }
+    
+    if (activeQuestionIndex < questions.length-1){
+        activeQuestionIndex += 1;
+        drawActiveQuestion();
+    } else {
+        winGame();
+    }
+    
+}
+
 function startGame(){
-    questions = [];
-    timeLimit = 5;
+    buildQuestions();
     // set timer start
+    timeLimit = 30;
     timerElement.text(timeLimit);
+    // make new score object
+    scoreRecord = new Score();
+    currentScore = 0;
+    activeQuestionIndex = 0;
 
     startTimer();
     deactivateStartButton();
+    drawActiveQuestion();
 }
 
 function startTimer(){
+
     // set timer as a global
     timer = setInterval(function(){
         timeLimit --;
         timerElement.text(timeLimit);
         console.log('Time remaining: ', timeLimit);
         // condition to break countdown
-        if (timeLimit === 0){
+        if (timeLimit <= 0){
             clearTimer();
             // lost the game due to timeout
             gameTimeout();
     }}, 1000)
 }
 
+function submitUserForm(event){
+    let user_initials = event.target.form[0].value;
+    scoreRecord.load();
+    scoreRecord.updateCurrentScore(user_initials, currentScore);
+    scoreRecord.save();
+    console.log('saved user initials', user_initials);
+}
+
 function winGame(){
     console.log('You won the game');
     clearTimer();
+
+    // reset game and button element
+    gameElement.text("");
+    buttonElement.text("");
+
+    // load user initials form for entry
+    buildUserInitialsForm();
 }
 
 class Question{
@@ -202,6 +331,3 @@ function compareDesc(a, b){
         return 0
     }
 }
-
-
-drawGameStart();

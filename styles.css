@@ -82,6 +82,12 @@ footer {
     bottom: 5px;
 }
 
+#buttons{
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+}
+
 #game{
     text-align: center;
     padding: 5px;
