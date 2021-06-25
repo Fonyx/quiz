@@ -104,16 +104,28 @@ function testScoreResetLocalMemory(){
 
 }
 
+// test timer - console log test
+function testGameStartTimer(){
+    console.log('TESTING-GameStartTimer')
+    let game = new Game();
+    timerValue = 5;
+    console.log('\tStarting timer at 5 seconds');
+    game.startTimer();
+    
+}
+
 // default test structure
-/* function testObjectMethodName(){
+/* 
+function testObjectMethodName(){
     let test_passed = true;
     console.log('TESTING-ObjectMethodName')
 
-    do stuff here to affect test_passed
+    //do stuff here to affect test_passed
 
     if (!test_passed){
         console.log('\tTEST FAILED');
     } else {
         console.log('\tTEST PASSED');
     }
+}
 }*/

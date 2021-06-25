@@ -1,75 +1,54 @@
 // GLOBALS
 debug = false;
+let timerValue = 30;
 
-// STRUCTURES
-class Game{
-    constructor(){
-        // variables
-        this.timerValue = 30;
-        this.userScores = new Score();
-        this.questions = [];
-        this.currentQuestionIndex = 0;
 
-        // elements
-        this.gameSection = document.querySelector('#game');
-        this.feedbackSection = document.querySelector('#feedback');
-        this.timerElement = document.querySelector('#timer_value');
-    }
+// local storage methods
 
-    // local storage methods
+// document methods
+    // building
+    
+    // clearing
+    
+    // rendering
 
-    // document methods
-        // building
-
-        // clearing
-        clearGameSection(){
-            this.gameSection.innerText = "";
-        }
-        clearFeedbackSection(){
-            this.feedbackSection.innerText = "";
-        }
-        // rendering
-
-    // state methods
-    gameTimeout(){
-        console.log('Game timed out');
-        this.userScores.resetLocalMemory();
-    }
-
-    winGame(){
-        console.log('You won the game');
-        this.userScores.resetLocalMemory();
-    }
-
-    exitGame(){
-        console.log('You left the game early');
-        this.userScores.resetLocalMemory();
-    }
-
-    // timer methods
-    startTimer(){
-        timer = setInterval(function(){
-            this.timerValue --;
-            timerElement.textContent = this.timerValue;
-
-            // condition to break countdown
-            if (this.timerValue === 0){
-                // lost the game due to timeout
-                gameTimeout();
-        }}, 1000)
-    }
-
-    // question methods
-    buildQuestions(){
-        this.questions.push(new Question(
-            'How many?', ['Too many', 'Not enough', 'Just right', 'Other'], 2
-        ));
-        this.questions.push(new Question(
-            'Why?', ['Because', 'Because Why Not', 'Because I said so', 'Do it!'], 3
-        ));
-    }
-
+// state methods
+function gameTimeout(){
+    console.log('Game timed out');
 }
+
+function winGame(){
+    console.log('You won the game');
+}
+
+function exitGame(){
+    console.log('You left the game early');
+}
+
+// timer methods
+function startTimer(){
+    let timer = setInterval(function(){
+        timerValue --;
+        this.timerElement.textContent = timerValue;
+
+        // condition to break countdown
+        if (this.timerValue === 0){
+            // lost the game due to timeout
+            gameTimeout();
+    }}, 1000)
+}
+
+// question methods
+function buildQuestions(){
+    this.questions.push(new Question(
+        'How many?', ['Too many', 'Not enough', 'Just right', 'Other'], 2
+    ));
+    this.questions.push(new Question(
+        'Why?', ['Because', 'Because Why Not', 'Because I said so', 'Do it!'], 3
+    ));
+}
+
+
 
 class Question{
     constructor(question, answers, correctIndex){
@@ -166,14 +145,13 @@ function compareDesc(a, b){
 }
 
 function startGame(){
-
     runTests();
-
 }
 
 function runTests(){
-    testScoreResetLocalMemory(); // works alone
-    testQuestionBuildQuestions(); // works alone
-    testScoreSaveAndLoad(); // works alone
-    testScoreSort(); // works alone
+    testScoreResetLocalMemory(); // works 
+    testQuestionBuildQuestions(); // works 
+    testScoreSaveAndLoad(); // works 
+    testScoreSort(); // works 
+    testGameStartTimer(); //
 }
