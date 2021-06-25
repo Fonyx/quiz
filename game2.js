@@ -204,16 +204,6 @@ function showHighScores(){
     // flag for empty result case
     let empty = true;
 
-    // make reset button
-    let resetButton = $('<button>');
-    resetButton.attr("id", "reset_scores_button");
-    resetButton.text("Reset leaderboard");
-    resetButton.on('click', function(){
-        recordedScores.resetLocalMemory();
-        showHighScores();
-    });
-    highScoreElement.append(resetButton);
-
     // make table elements
     let playerBoard = $('<div>');
     let playerTable = $('<table>');
@@ -277,6 +267,16 @@ function showHighScores(){
         // get parent div of the table
         let tablePlayerBoard = $('#player_board');
         tablePlayerBoard.append(announcement);
+    } else {
+        // make reset button
+        let resetButton = $('<button>');
+        resetButton.attr("id", "reset_scores_button");
+        resetButton.text("Reset leaderboard");
+        resetButton.on('click', function(){
+            recordedScores.resetLocalMemory();
+            showHighScores();
+        });
+        highScoreElement.append(resetButton);
     }
     
 }
