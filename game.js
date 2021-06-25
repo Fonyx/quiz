@@ -41,17 +41,22 @@ function buildQuestions(){
 
     questions.push(new Question(
         'Could you explain arrays?', 
-        ['A structure of data', 'A numeric type', 'A string', 'A process'], 
+        ['A numeric type', 'A structure of data', 'A string', 'A process'], 
         0
     ));
     questions.push(new Question(
         'What is a variable?', 
-        ['A stored value', 'An instruction', 'A style choice', 'An algorithm'], 
+        ['An instruction', 'A style choice', 'A stored value', 'An algorithm'], 
         0
     ));
     questions.push(new Question(
         'What do you understand by loops?',
         ['A repeated instruction', 'a limit', 'a variable', 'a data structure'],
+        0
+    ));
+    questions.push(new Question(
+        'Javascript is?',
+        ['Synchronous', 'A low level language', 'A fast language', 'Asynchronous'],
         0
     ));
 }
@@ -351,11 +356,10 @@ function winGame(){
 }
 
 class Question{
-    constructor(question, answers, correctIndex, image){
+    constructor(question, answers, correctIndex){
         this.question = question;
         this.answers = answers;
         this.correctIndex = correctIndex;
-        this.image = image;
         this.choiceIndex = undefined;
         this.correct = false;
     }
