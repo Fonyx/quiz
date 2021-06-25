@@ -1,23 +1,28 @@
 // RUNTIME
 
 // test build questions
-function testBuildQuestions(){
-    console.log('\tTESTING-buildQuestions')
+function testQuestionBuildQuestions(){
+    console.log('TESTING-QuestionBuildQuestions');
+    let test_passed = true;
     let game = new Game();
     game.buildQuestions();
     // console.log(game.questions);
-    if (game.questions.length == 2){
-        console.log('TEST PASSED');
+    if (game.questions.length != 2){
+        test_passed = false;
+    }
+
+    if (!test_passed){
+        console.log('\tTEST FAILED');
     } else {
-        console.log('TEST FAILED');
-        console.log('questions array is: ', game.questions);
+        console.log('\tTEST PASSED');
     }
 
 }
 
 // test load high scores
-function testSaveAndLoadScores(){
-    console.log('\tTESTING-loadScores')
+function testScoreSaveAndLoad(){
+    console.log('TESTING-ScoreSaveAndLoad');
+    let test_passed = true;
     let scores = new Score();
     scores.load();
     // scores.logResults();
@@ -27,20 +32,24 @@ function testSaveAndLoadScores(){
     scores.load();
     // scores.logResults();
     // console.log('There should be one result called save1 = 6');
-    if (scores.results[0].initials === 'save1' && scores.results[0].score === 6){
-        console.log('TEST PASSED');
+    if (scores.results[0].initials !== 'save1' || scores.results[0].score !== 6){
+        test_passed = false
+    } 
+
+    // printout
+    if (!test_passed){
+        console.log('\tTEST FAILED');
     } else {
-        console.log('TEST FAILED');
-        console.log('result was:', game.results);
+        console.log('\tTEST PASSED');
     }
     // teardown
     scores.resetLocalMemory();
 }
 
 // test score sort
-function testSortScore(){
+function testScoreSort(){
     let test_passed = true;
-    console.log('\tTESTING-sortScore')
+    console.log('TESTING-ScoreSort')
     let scores = new Score();
     scores.updateCurrentScore('script_sortB', 3);
     scores.addCurrentToResults();
@@ -59,17 +68,18 @@ function testSortScore(){
         } 
     }
     if (!test_passed){
-        console.log('TEST FAILED');
+        console.log('\tTEST FAILED');
     } else {
-        console.log('TEST PASSED');
+        console.log('\tTEST PASSED');
     }
     // teardown
     scores.resetLocalMemory();
 }
 
 // test reset memory
-function testResetLocalMemory(){
-    console.log('\tTESTING-resetMemory')
+function testScoreResetLocalMemory(){
+    console.log('TESTING-ScoreResetLocalMemory');
+    let test_passed = true;
     let scores = new Score();
     scores.updateCurrentScore('test-delete', 6);
     scores.updateCurrentScore('test-current', 6);
@@ -82,10 +92,28 @@ function testResetLocalMemory(){
     scores.resetLocalMemory();
     // scores.logResults();
     // console.log('Should have removed test-delete and re-added test-current');
-    if(scores.results[0].initials === "test-current" && scores.results[0].score === 6){
-        console.log('TEST PASSED');
+    if(scores.results[0].initials !== "test-current" || scores.results[0].score !== 6){
+        test_passed = false;
+    }
+
+    if (!test_passed){
+        console.log('\tTEST FAILED');
     } else {
-        console.log('TEST FAILED');
+        console.log('\tTEST PASSED');
     }
 
 }
+
+// default test structure
+/* function testObjectMethodName(){
+    let test_passed = true;
+    console.log('TESTING-ObjectMethodName')
+
+    do stuff here to affect test_passed
+
+    if (!test_passed){
+        console.log('\tTEST FAILED');
+    } else {
+        console.log('\tTEST PASSED');
+    }
+}*/

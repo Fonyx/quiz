@@ -172,8 +172,8 @@ function startGame(){
 }
 
 function runTests(){
-    testResetLocalMemory(); // works alone
-    testBuildQuestions(); // works alone
-    testSaveAndLoadScores(); // works alone
-    testSortScore(); // works alone
+    testScoreResetLocalMemory(); // works alone
+    testQuestionBuildQuestions(); // works alone
+    testScoreSaveAndLoad(); // works alone
+    testScoreSort(); // works alone
 }
