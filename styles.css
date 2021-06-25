@@ -94,8 +94,14 @@ footer {
     margin: 5px;
 }
 
-#game{
-    display: flex;
+#question{
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    width: 100%;
+}
+
+#answers{
     text-align: center;
     padding: 5px;
     margin: 5px;

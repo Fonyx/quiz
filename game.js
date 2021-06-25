@@ -6,7 +6,8 @@ feedbackTimeout = 3500;
 timerElement = $('#timer_value');
 highScoreElement = $('#high_score');
 buttonElement = $('#buttons');
-gameElement = $('#game');
+questionElement = $('#question');
+answersElement = $('#answers');
 feedbackElement = $('#feedback');
 
 
@@ -74,7 +75,7 @@ function buildUserInitialsForm(){
     userCancel.attr('id','cancel_button');
     userCancel.attr('type', 'button')
 
-    gameElement.append(formElement);
+    questionElement.append(formElement);
     formElement.append(prompt);
     formElement.append(userInput);
     formElement.append(userSubmit);
@@ -105,17 +106,18 @@ function deactivateStartButton(){
 
 function drawActiveQuestion(){
 
-    // reset game element
+    // reset question and answer element
     highScoreElement.text("");
-    gameElement.text("");
+    questionElement.text("");
+    answersElement.text("");
 
     currentQuestion = questions[activeQuestionIndex]
 
     // render question
-    let questionElement = $('<h2>');
-    questionElement.attr('id',"question_text");
-    questionElement.text(currentQuestion.question);
-    gameElement.append(questionElement);
+    let h2Element = $('<h2>');
+    h2Element.attr('id',"question_text");
+    h2Element.text(currentQuestion.question);
+    questionElement.append(h2Element);
 
     // render image for question
     let imageElement = $('<img>');
@@ -127,7 +129,7 @@ function drawActiveQuestion(){
         answerButton.attr('class',"answer_button");
         answerButton.attr('data-index',i);
         answerButton.text(currentQuestion.answers[i]);
-        gameElement.append(answerButton);
+        answersElement.append(answerButton);
     }
 
     // add event listener to buttons created
@@ -139,7 +141,8 @@ function drawActiveQuestion(){
 function drawGameStart(){
     // reset highscore game and button element
     highScoreElement.text("");
-    gameElement.text("");
+    questionElement.text("");
+    answersElement.text("");
     buttonElement.text("");
     
     // create start and stop buttons
@@ -339,7 +342,8 @@ function winGame(){
     clearTimer();
 
     // reset game and button element
-    gameElement.text("");
+    questionElement.text("");
+    answersElement.text("");
     buttonElement.text("");
 
     // load user initials form for entry
