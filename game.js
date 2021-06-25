@@ -40,19 +40,19 @@ function buildQuestions(){
     questions = [];
 
     questions.push(new Question(
-        'What do you understand by maintaining and updating a computer program?', 
-        ['Move through and find difference', 'take 3 and multiply', 'convert to str', 'loops'], 
+        'Could you explain arrays?', 
+        ['A structure of data', 'A numeric type', 'A string', 'A process'], 
         0
     ));
     questions.push(new Question(
-        'How do you find the duplicate number on a given integer array?', 
-        ['make list of previous and compare', 'counter and loop', 'frequency distribution', 'convert'], 
+        'What is a variable?', 
+        ['A stored value', 'An instruction', 'A style choice', 'An algorithm'], 
         0
     ));
     questions.push(new Question(
-        'How do you find the middle element of a singly linked list in one pass?',
-        ['count up', 'search for length/2', 'convert', 'something'],
-        1
+        'What do you understand by loops?',
+        ['A repeated instruction', 'a limit', 'a variable', 'a data structure'],
+        0
     ));
 }
 
