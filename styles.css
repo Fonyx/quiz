@@ -95,9 +95,11 @@ footer {
 }
 
 #game{
+    display: flex;
     text-align: center;
     padding: 5px;
     margin: 5px;
+    width: 100%;
 }
 
 #feedback{
@@ -106,7 +108,7 @@ footer {
 }
 
 .highscore_row{
-    color: var(--tertiary)
+    color: var(--tertiary);
 }
 
 #action_buttons{
