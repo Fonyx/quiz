@@ -4,6 +4,7 @@ feedbackTimeout = 2500;
 
 // ELEMENTS
 timerElement = $('#timer_value');
+highScoreElement = $('#high_score');
 buttonElement = $('#buttons');
 gameElement = $('#game');
 feedbackElement = $('#feedback');
@@ -96,6 +97,7 @@ function deactivateStartButton(){
 function drawActiveQuestion(){
 
     // reset game element
+    highScoreElement.text("");
     gameElement.text("");
 
     currentQuestion = questions[activeQuestionIndex]
@@ -122,8 +124,10 @@ function drawActiveQuestion(){
 }
 
 function drawGameStart(){
-    // reset game element
+    // reset highscore game and button element
+    highScoreElement.text("");
     gameElement.text("");
+    buttonElement.text("");
     
     // create start and stop buttons
     let startBtn = $('<button>');
@@ -188,6 +192,95 @@ function guess(event){
     
 }
 
+function showHighScores(){
+    // load results
+    let recordedScores = new Score();
+    recordedScores.load();
+
+    // reset in case of double load
+    highScoreElement.text("");
+    buttonElement.text("");
+
+    // flag for empty result case
+    let empty = true;
+
+    // make reset button
+    let resetButton = $('<button>');
+    resetButton.attr("id", "reset_scores_button");
+    resetButton.text("Reset leaderboard");
+    resetButton.on('click', function(){
+        recordedScores.resetLocalMemory();
+        showHighScores();
+    });
+    highScoreElement.append(resetButton);
+
+    // make table elements
+    let playerBoard = $('<div>');
+    let playerTable = $('<table>');
+    let tableHeader = $('<tr>');
+    let tableD1 = $('<td>');
+    let tableUsername = $('<h2>');
+    let tableD2 = $('<td>');
+    let tableScore = $('<h2>');
+
+    // modify classes and id's
+    playerBoard.attr("id", "player_board");
+    playerTable.attr("id", "player_table");
+    tableHeader.attr("id", "table_header");
+
+    // add text to table data elements
+    tableUsername.text("Initials");
+    tableScore.text("Score");
+
+    // build table structure
+    highScoreElement.append(playerBoard);
+    playerBoard.append(playerTable);
+    playerTable.append(tableHeader);
+    tableD1.append(tableUsername);
+    tableHeader.append(tableD1);
+    tableD2.append(tableScore);
+    tableHeader.append(tableD2);
+
+    // populate high scores from local data
+    for(let i =0; i<recordedScores.results.length; i++){
+        // create table row element
+        let tableRow = $('<tr>');
+
+        // define row properties
+        tableRow.attr('data-index', i);
+        tableRow.attr("class","highscore_row");
+
+        // create table data elements and set class names
+        let tableDataInitial = $('<td>');
+        tableDataInitial.attr("class", "table_data_initial");
+        let tableDataScore = $('<td>');
+        tableDataScore.attr("class", "table_data_score");
+
+        // insert data
+        tableDataInitial.text(recordedScores.results[i].initials);
+        tableDataScore.text(recordedScores.results[i].score);
+
+        // attach table data to row
+        tableRow.append(tableDataInitial);
+        tableRow.append(tableDataScore);
+        // attach table row to table
+        playerTable.append(tableRow);
+        // set so we know results were printed
+        empty = false;
+    }
+    // if no results were printed
+    if(empty){
+        // create announcement node to display that no results were rendered
+        let announcement = $('<h3>');
+        // add announcement text
+        announcement.text('No results found in local storage');
+        // get parent div of the table
+        let tablePlayerBoard = $('#player_board');
+        tablePlayerBoard.append(announcement);
+    }
+    
+}
+
 function startGame(){
     buildQuestions();
     // set timer start
@@ -227,6 +320,7 @@ function submitUserForm(event){
 }
 
 function winGame(){
+    announceFeedback('You scored: '+currentScore+' out of: '+ questions.length);
     console.log('You won the game');
     clearTimer();
 
@@ -299,6 +393,7 @@ class Score{
     // reset local memory
     resetLocalMemory(){
         localStorage.clear();
+        console.log('reset local storage was complete');
         this.results = [];
         // if there was a current working result, add it again after reset
         if (this.current_initial !== ""){
