@@ -1,6 +1,8 @@
 # quiz
 A code question quiz project, 8 questions with a time limit
 ![Screenshot](https://github.com/Fonyx/quiz/blob/main/screenshot.PNG?raw=true 'The Coding Quiz');
+deployed ad: https://fonyx.github.io/quiz/
+
 
 ## User Story
 
