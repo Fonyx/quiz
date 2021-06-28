@@ -33,7 +33,7 @@ function announceFeedback(feedback){
     feedbackElement.append(paragraphElement);
 
     // append and set to empty once timeout
-    setTimeout(function (){
+    announceFeedbackTimout = setTimeout(function (){
         feedbackElement.text("");
     }, feedbackTimeout)
 }
@@ -77,10 +77,12 @@ function buildUserInitialsForm(){
     userInput.attr('id', 'user_input');
     userSubmit.text('SAVE');
     userSubmit.attr('id','submit_button');
-    userSubmit.attr('type', 'submit')
+    userSubmit.attr('type', 'submit');
+    userSubmit.attr('class', 'w-100');
     userCancel.text('CANCEL');
     userCancel.attr('id','cancel_button');
-    userCancel.attr('type', 'button')
+    userCancel.attr('type', 'button');
+    userCancel.attr('class', 'w-100');
 
     questionElement.append(formElement);
     formElement.append(prompt);
@@ -98,7 +100,9 @@ function cancelUserSubmission(){
     drawGameStart();
 }
 
-function clearTimer(){
+function clearTimersAndTimeouts(){
+    clearTimeout(announceFeedbackTimout);
+    clearTimeout(screenlock);
     clearInterval(timer);
     // clear the timer display
     timerElement.text(0);
@@ -123,7 +127,6 @@ function deactivateStartButton(){
     endBtn.prop('disabled', false);
     startBtn.hide();
     endBtn.show();
-
 }
 
 function drawActiveQuestion(){
@@ -206,7 +209,8 @@ function exitGame(){
 
 function endGame(){
     activateStartButton();
-    clearTimer();
+    clearTimersAndTimeouts();
+
     buttonElement.text("");
     drawGameStart();
 }
@@ -228,7 +232,7 @@ function guess(event){
     lockAnswerButtons();
 
     // add a delay into the tear down
-    setTimeout(function(){
+    screenlock = setTimeout(function(){
         if (activeQuestionIndex < questions.length-1){
             activeQuestionIndex += 1;
             drawActiveQuestion();
@@ -246,6 +250,16 @@ function lockAnswerButtons(){
 }
 
 function showHighScores(){
+
+    // reset highscore game and button element
+    highScoreElement.text("");
+    questionElement.text("");
+    answersElement.text("");
+    buttonElement.text("");
+
+    // end game if in progress
+    endGame();
+
     // load results
     let recordedScores = new Score();
     recordedScores.load();
@@ -376,7 +390,7 @@ function submitUserForm(event){
 function winGame(){
     announceFeedback('You scored: '+currentScore+' out of: '+ questions.length);
     console.log('You won the game');
-    clearTimer();
+    clearTimersAndTimeouts();
 
     // reset game and button element
     questionElement.text("");
