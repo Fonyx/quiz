@@ -176,15 +176,11 @@ function drawGameStart(){
 }
 
 function exitGame(){
-    console.log('You left the game early');
-    activateStartButton();
-    clearTimer();
-    buttonElement.text("");
-    drawGameStart();
+    announceFeedback('You exited the game early');
+    endGame();
 }
 
-function gameTimeout(){
-    announceFeedback('Ran out of time :(');
+function endGame(){
     activateStartButton();
     clearTimer();
     buttonElement.text("");
@@ -327,9 +323,9 @@ function startTimer(){
         console.log('Time remaining: ', timeLimit);
         // condition to break countdown
         if (timeLimit <= 0){
-            clearTimer();
             // lost the game due to timeout
-            gameTimeout();
+            announceFeedback('Ran out of time :(');
+            endGame();
     }}, 1000)
 }
 
