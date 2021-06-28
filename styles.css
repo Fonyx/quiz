@@ -83,6 +83,12 @@ footer {
     bottom: 5px;
 }
 
+/* || CLASSES */
+
+.highscore_row{
+    color: var(--tertiary);
+}
+
 #high_score{
     text-align: center;
     padding: 5px;
@@ -112,10 +118,6 @@ footer {
 #feedback{
     text-align: center;
     margin-top: 5px;
-}
-
-.highscore_row{
-    color: var(--tertiary);
 }
 
 #action_buttons{

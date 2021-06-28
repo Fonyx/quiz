@@ -1,6 +1,6 @@
 // GLOBALS
 debug = false;
-feedbackTimeout = 3500;
+feedbackTimeout = 1500;
 
 // ELEMENTS
 timerElement = $('#timer_value');
@@ -50,7 +50,7 @@ function buildQuestions(){
         2
     ));
     questions.push(new Question(
-        'What do you understand by loops?',
+        'What do you understand about loops?',
         ['A repeated instruction', 'a limit', 'a variable', 'a data structure'],
         0
     ));
@@ -102,6 +102,18 @@ function clearTimer(){
     timerElement.text(0);
 }
 
+function colorButtonOnClick(event){
+    // color button green if data-correct is true
+    console.log(event.target.dataset['correct']);
+    if (event.target.dataset['correct'] ===  'true'){
+        event.target.style.color = 'lightgreen';
+        event.target.style.background = 'green';
+    } else {
+        event.target.style.color = 'black';
+        event.target.style.background = 'red';
+    }
+}
+
 function deactivateStartButton(){
     let startBtn = $('#start_button');
     let endBtn = $('#end_button');
@@ -133,6 +145,12 @@ function drawActiveQuestion(){
         let answerButton = $('<button>')
         answerButton.attr('class',"answer_button");
         answerButton.attr('data-index',i);
+        // add details for button if it is the answer or not
+        if (i === currentQuestion.correctIndex){
+            answerButton.attr('data-correct', true);
+        } else {
+            answerButton.attr('data-correct', false);
+        }
         answerButton.text(currentQuestion.answers[i]);
         answersElement.append(answerButton);
     }
@@ -140,6 +158,7 @@ function drawActiveQuestion(){
     // add event listener to buttons created
     let buttonElements = $('.answer_button');
     buttonElements.on('click', guess)
+    buttonElements.on('mouseup', colorButtonOnClick);
 
 }
 
@@ -199,14 +218,18 @@ function guess(event){
         timeLimit -= 5;
         announceFeedback('Wrong, the answer was: '+currentQuestion.answers[activeQuestionIndex]);
     }
-    
-    if (activeQuestionIndex < questions.length-1){
-        activeQuestionIndex += 1;
-        drawActiveQuestion();
-    } else {
-        winGame();
-    }
-    
+
+    // add a delay into the tear down
+    setTimeout(function(){
+        console.log('delayed next question for visuals');
+        if (activeQuestionIndex < questions.length-1){
+            activeQuestionIndex += 1;
+            drawActiveQuestion();
+        } else {
+            winGame();
+        }
+    }, feedbackTimeout);
+
 }
 
 function showHighScores(){
