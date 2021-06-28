@@ -15,8 +15,10 @@ feedbackElement = $('#feedback');
 function activateStartButton(){
     let startBtn = $('#start_button');
     let endBtn = $('#end_button');
-    startBtn.attr('disabled',false);
-    endBtn.attr('disabled', true);
+    startBtn.prop('disabled', false);
+    endBtn.prop('disabled', true);
+    startBtn.show();
+    endBtn.hide();
 }
 
 function announceFeedback(feedback){
@@ -40,7 +42,7 @@ function buildQuestions(){
     questions = [];
 
     questions.push(new Question(
-        'Could you explain arrays?', 
+        'What is an array?', 
         ['A numeric type', 'A structure of data', 'A string', 'A process'], 
         1
     ));
@@ -50,7 +52,7 @@ function buildQuestions(){
         2
     ));
     questions.push(new Question(
-        'What do you understand about loops?',
+        'What is a loop?',
         ['A repeated instruction', 'a limit', 'a variable', 'a data structure'],
         0
     ));
@@ -117,8 +119,11 @@ function colorButtonOnClick(event){
 function deactivateStartButton(){
     let startBtn = $('#start_button');
     let endBtn = $('#end_button');
-    startBtn.attr('disabled',true);
-    endBtn.attr('disabled',false);
+    startBtn.prop('disabled', true);
+    endBtn.prop('disabled', false);
+    startBtn.hide();
+    endBtn.show();
+
 }
 
 function drawActiveQuestion(){
@@ -219,9 +224,11 @@ function guess(event){
         announceFeedback('Wrong, the answer was: '+currentQuestion.answers[activeQuestionIndex]);
     }
 
+    // deactivate buttons to prevent multiple guesses
+    lockAnswerButtons();
+
     // add a delay into the tear down
     setTimeout(function(){
-        console.log('delayed next question for visuals');
         if (activeQuestionIndex < questions.length-1){
             activeQuestionIndex += 1;
             drawActiveQuestion();
@@ -230,6 +237,12 @@ function guess(event){
         }
     }, feedbackTimeout);
 
+}
+
+function lockAnswerButtons(){
+    console.log('locking answer buttons until page tear down');
+    let answerButtons = $('.answer_button');
+    answerButtons.prop('disabled', true);
 }
 
 function showHighScores(){
