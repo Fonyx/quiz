@@ -10,6 +10,12 @@ let changeC = document.getElementById('change_color_button');
 // add event listener to color change button
 changeC.addEventListener('click', shuffleColorScheme);
 
+// random color generator
+function getRandomColorIndex(){
+    let max = primaries.length;
+    return Math.floor(Math.random()*max+1);
+}
+
 
 // change colors in :root dom element
 function shuffleColorScheme(){

@@ -53,7 +53,7 @@ span{
 }
 
 button {
-    border-radius: 12px;
+    border-radius: 7px;
     background-color: var(--quaternary);
     color: var(--secondary);
     width: 150px;

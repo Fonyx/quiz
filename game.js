@@ -76,14 +76,16 @@ function buildUserInitialsForm(){
 
     prompt.text('Add initials to store your score');
     userInput.attr('id', 'user_input');
+    userInput.attr('class', 'my-2 py-2 w-100');
     userSubmit.text('SAVE');
     userSubmit.attr('id','submit_button');
+    userSubmit.attr('class', 'my-2 py-2 w-100');
     userSubmit.attr('type', 'submit');
     userSubmit.attr('class', 'w-100');
     userCancel.text('CANCEL');
     userCancel.attr('id','cancel_button');
     userCancel.attr('type', 'button');
-    userCancel.attr('class', 'w-100');
+    userCancel.attr('class', 'my-2 py-2 w-100');
 
     questionElement.append(formElement);
     formElement.append(prompt);
@@ -102,9 +104,12 @@ function cancelUserSubmission(){
 }
 
 function clearTimersAndTimeouts(){
-    clearTimeout(announceFeedbackTimout);
-    clearTimeout(screenlock);
-    clearInterval(timer);
+    try{
+        clearInterval(timer);
+        clearTimeout(announceFeedbackTimout);
+        clearTimeout(screenlock);
+    } catch {
+    }
     // clear the timer display
     timerElement.text(0);
 }
@@ -144,10 +149,6 @@ function drawActiveQuestion(){
     h2Element.attr('id',"question_text");
     h2Element.text(currentQuestion.question);
     questionElement.append(h2Element);
-
-    // render image for question
-    let imageElement = $('<img>');
-    imageElement.attr('src');
 
     // render answers as buttons
     for(let i = 0; i<currentQuestion.answers.length; i++){
@@ -258,7 +259,11 @@ function showHighScores(){
     buttonElement.text("");
 
     // end game if in progress
-    endGame();
+    try{
+        endGame()
+    } catch (error){
+    }
+
 
     // load results
     let recordedScores = new Score();
@@ -387,7 +392,7 @@ function submitUserForm(event){
 }
 
 function winGame(){
-    announceFeedback('You scored: '+currentScore+' out of: '+ questions.length);
+    announceFeedback('You scored: '+currentScore+' out of '+ questions.length);
     console.log('You won the game');
     clearTimersAndTimeouts();
 
