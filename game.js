@@ -42,12 +42,12 @@ function buildQuestions(){
     questions.push(new Question(
         'Could you explain arrays?', 
         ['A numeric type', 'A structure of data', 'A string', 'A process'], 
-        0
+        1
     ));
     questions.push(new Question(
         'What is a variable?', 
         ['An instruction', 'A style choice', 'A stored value', 'An algorithm'], 
-        0
+        2
     ));
     questions.push(new Question(
         'What do you understand by loops?',
@@ -57,7 +57,7 @@ function buildQuestions(){
     questions.push(new Question(
         'Javascript is?',
         ['Synchronous', 'A low level language', 'A fast language', 'Asynchronous'],
-        0
+        3
     ));
 }
 
