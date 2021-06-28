@@ -89,6 +89,10 @@ footer {
     color: var(--tertiary);
 }
 
+#play_game_text, #show_scores_text{
+    cursor: pointer;
+}
+
 #high_score{
     text-align: center;
     padding: 5px;

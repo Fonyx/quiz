@@ -1,6 +1,7 @@
 // GLOBALS
 debug = false;
 feedbackTimeout = 1500;
+incorectPenalty = 15;
 
 // ELEMENTS
 timerElement = $('#timer_value');
@@ -151,7 +152,7 @@ function drawActiveQuestion(){
     // render answers as buttons
     for(let i = 0; i<currentQuestion.answers.length; i++){
         let answerButton = $('<button>')
-        answerButton.attr('class',"answer_button");
+        answerButton.attr('class',"answer_button my-2 py-2 w-100");
         answerButton.attr('data-index',i);
         // add details for button if it is the answer or not
         if (i === currentQuestion.correctIndex){
@@ -224,7 +225,7 @@ function guess(event){
     } else {
         // this is a placeholder if you want to do punishment errors
         // currentScore --;
-        timeLimit -= 5;
+        timeLimit -= incorectPenalty;
         announceFeedback('Wrong, the answer was: '+currentQuestion.answers[activeQuestionIndex]);
     }
 
@@ -244,7 +245,6 @@ function guess(event){
 }
 
 function lockAnswerButtons(){
-    console.log('locking answer buttons until page tear down');
     let answerButtons = $('.answer_button');
     answerButtons.prop('disabled', true);
 }
@@ -370,7 +370,6 @@ function startTimer(){
     timer = setInterval(function(){
         timeLimit --;
         timerElement.text(timeLimit);
-        console.log('Time remaining: ', timeLimit);
         // condition to break countdown
         if (timeLimit <= 0){
             // lost the game due to timeout

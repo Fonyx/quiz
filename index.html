@@ -11,22 +11,26 @@
 </head>
 <body onload="drawGameStart();">
     <header>
-        <div id="view_high_scores">
-            <h3 onclick="drawGameStart();">Play Game</h3>
-            <h3 onclick="showHighScores();">High Scores</h3>
+        <div class="container">
+            <div class="row justify-content-center">
+                <h1>CODING QUIZ</h1>
+            </div>
+            <div class="row justify-content-around">
+                <h3 id="play_game_text" onclick="drawGameStart();">Play Game</h3>
+                <h3 id="show_scores_text" onclick="showHighScores();">High Scores</h3>
+                <h3>Time Remaining:
+                    <span id="timer_value"></span>
+                </h3>
+            </div>
         </div>
-        <h1>QUIZ</h1>
-        <h3 id="timer_text">Time Remaining:
-            <span id="timer_value"></span>
-        </h3>
     </header>
 
     <section id="dynamics" class="container py-3 my-3">
-        <div id="high_score" class=""></div>
-        <div id="buttons" class=""></div>
-        <div id="question" class=""></div>
-        <div id="answers" class=""></div>
-        <div id="feedback" class=""></div>
+        <div id="high_score" class="my-1"></div>
+        <div id="buttons" class="my-1"></div>
+        <div id="question" class="my-1"></div>
+        <div id="answers" class="my-1"></div>
+        <div id="feedback" class="my-1"></div>
     </section>
 
     <footer>
