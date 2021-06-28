@@ -1,7 +1,7 @@
 // GLOBALS
 debug = false;
 feedbackTimeout = 1500;
-incorectPenalty = 15;
+incorrectPenalty = 15;
 
 // ELEMENTS
 timerElement = $('#timer_value');
@@ -59,33 +59,22 @@ function buildQuestions(){
     ));
     questions.push(new Question(
         'Which of the following tags is used to insert a blank line?',
-        ['<br>', '<hr>', '<p>', '<h1>'],
-        1
+        ['<br>', '<hr>', '<p>', '<h1>'], 0
     ));
     questions.push(new Question(
         'Which tag set provides information to the browser about your webpage including the author name and keywords?',
-        ['<html></html>', '<body></body>', '<style></style>', '<meta></meta'],
-        3
+        ['<html></html>', '<body></body>', '<style></style>', '<meta></meta'], 3
     ));
     questions.push(new Question(
         'When your background is tiling, you should try to fix it by',
-        ['Checking your screen resolution.', 
-            'Resizing your image.',
-            'Both checking your screen resolution and resizing your image.', 'None of the above.',
-            ],
-        2
+        ['Checking your screen resolution.', 'Resizing your image.','Both checking your screen resolution and resizing your image.', 'None of the above.'],2
     ));
     questions.push(new Question(
         'Where is the correct place to put the title tag in an HTML document?',
-        ['Above the HTML tag', 'In the head of the document', 
-        'In the body of the document', 'It doesn"t matter'],
-        1
+        ['Above the HTML tag', 'In the head of the document', 'In the body of the document', 'It does not matter'],1
     ));
     questions.push(new Question(
-        'The # symbol specifies that the selector is?',
-        ['id', 'tag', 
-        'class', 'first'],
-        0
+        'The # symbol specifies that the selector is?',['id', 'tag','class', 'first'],0
     ));
 }
 
@@ -132,7 +121,7 @@ function clearTimersAndTimeouts(){
     try{
         clearInterval(timer);
         clearTimeout(announceFeedbackTimout);
-        clearTimeout(screenlock);
+        clearTimeout(screenLock);
     } catch {
     }
     // clear the timer display
@@ -141,7 +130,7 @@ function clearTimersAndTimeouts(){
 
 function colorButtonOnClick(event){
     // color button green if data-correct is true
-    console.log(event.target.dataset['correct']);
+    console.log('was choice correct?: ',event.target.dataset['correct']);
     if (event.target.dataset['correct'] ===  'true'){
         event.target.style.color = 'lightgreen';
         event.target.style.background = 'green';
@@ -251,15 +240,15 @@ function guess(event){
     } else {
         // this is a placeholder if you want to do punishment errors
         // currentScore --;
-        timeLimit -= incorectPenalty;
-        announceFeedback('Wrong, the answer was: '+currentQuestion.answers[activeQuestionIndex]);
+        timeLimit -= incorrectPenalty;
+        announceFeedback('Wrong, the answer was: '+currentQuestion.answers[currentQuestion.correctIndex]);
     }
 
     // deactivate buttons to prevent multiple guesses
     lockAnswerButtons();
 
     // add a delay into the tear down
-    screenlock = setTimeout(function(){
+    screenLock = setTimeout(function(){
         if (activeQuestionIndex < questions.length-1){
             activeQuestionIndex += 1;
             drawActiveQuestion();
