@@ -58,9 +58,34 @@ function buildQuestions(){
         0
     ));
     questions.push(new Question(
-        'Javascript is?',
-        ['Synchronous', 'A low level language', 'A fast language', 'Asynchronous'],
+        'Which of the following tags is used to insert a blank line?',
+        ['<br>', '<hr>', '<p>', '<h1>'],
+        1
+    ));
+    questions.push(new Question(
+        'Which tag set provides information to the browser about your webpage including the author name and keywords?',
+        ['<html></html>', '<body></body>', '<style></style>', '<meta></meta'],
         3
+    ));
+    questions.push(new Question(
+        'When your background is tiling, you should try to fix it by',
+        ['Checking your screen resolution.', 
+            'Resizing your image.',
+            'Both checking your screen resolution and resizing your image.', 'None of the above.',
+            ],
+        2
+    ));
+    questions.push(new Question(
+        'Where is the correct place to put the title tag in an HTML document?',
+        ['Above the HTML tag', 'In the head of the document', 
+        'In the body of the document', 'It doesn"t matter'],
+        1
+    ));
+    questions.push(new Question(
+        'The # symbol specifies that the selector is?',
+        ['id', 'tag', 
+        'class', 'first'],
+        0
     ));
 }
 
